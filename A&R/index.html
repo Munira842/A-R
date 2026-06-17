@@ -179,10 +179,7 @@ function confirmAttendance(response) {
       responseMsg.innerText = "❌ خطأ في الاتصال";
     });
 }
-      .catch(() => {
-        responseMsg.innerText = "❌ حدث خطأ أثناء الاتصال بالخادم.";
-      });
-  }
+
 
   function showQR(link, count) {
     qrContainer.innerHTML = "";
