@@ -159,23 +159,26 @@ body{
   const scriptURL = "https://script.google.com/macros/s/AKfycbzUmsecyIk1nvYAG1658G52L-JUJHWyaLvS7J_mVa_laXxh1haOPnyAmbbfcQHajMLluQ/exec";
 
 
-  function confirmAttendance(response) {
-    responseMsg.innerText = "⏳ جاري التسجيل...";
-    fetch(`${scriptURL}?name=${encodeURIComponent(nameParam)}&token=${token}&response=${response}`)
-      .then(res => res.json())
-      .then(res => {
-        responseButtons.style.display = "none";
-        attendanceTitle.style.display = "none";
-        responseMsg.innerText = res.message;
+function confirmAttendance(response) {
+  responseMsg.innerText = "⏳ جاري التسجيل...";
 
-        if (res.status === "success" || res.status === "already") {
-          showQR(res.qr, res.max);
-        } else if (res.status === "declined") {
-          qrContainer.innerHTML = "";
-          qrNote.style.display = "none";
-          invitationCount.style.display = "none";
-        }
-      })
+  fetch(`${scriptURL}?token=${token}&response=${response}`)
+    .then(res => res.json())
+    .then(res => {
+      responseButtons.style.display = "none";
+      attendanceTitle.style.display = "none";
+      responseMsg.innerText = res.message;
+
+      if (res.status === "success" || res.status === "already") {
+        showQR(res.qr, res.max);
+      } else if (res.status === "declined") {
+        qrContainer.innerHTML = "";
+      }
+    })
+    .catch(() => {
+      responseMsg.innerText = "❌ خطأ في الاتصال";
+    });
+}
       .catch(() => {
         responseMsg.innerText = "❌ حدث خطأ أثناء الاتصال بالخادم.";
       });
